@@ -134,9 +134,10 @@ class TourismPlaceGrid extends StatelessWidget {
         children: zodiacsData.map((sign) {
           return InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return DetailPage(sign: sign);
-              }));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailMobilePage(sign: sign)));
             },
             child: Card(
               child: Column(
@@ -182,48 +183,71 @@ class TourismPlaceList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          final Zodiacs sign = zodiacsData[index];
-          return InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return DetailPage(sign: sign);
-              }));
-            },
-            child: Card(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Image.asset(sign.imgAsset),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            sign.name,
-                            style: const TextStyle(fontSize: 16.0),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(sign.birthdate),
-                        ],
+      child: SizedBox(
+        height: 550.0,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            final Zodiacs sign = zodiacsData[index];
+            return InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return DetailPage(sign: sign);
+                }));
+              },
+              child: Card(
+                margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 280.0,
+                      height: 550.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.0),
+                        image: DecorationImage(
+                            image: AssetImage(sign.imgAsset),
+                            fit: BoxFit.cover,
+                            scale: 1.1),
                       ),
                     ),
-                  )
-                ],
+                    Positioned(
+                      bottom: 20.0,
+                      left: 20.0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(6.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Colors.black26.withOpacity(0.1),
+                            ),
+                            child: Text(
+                              sign.birthdate,
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10.0),
+                          Text(
+                            sign.name,
+                            style: const TextStyle(
+                                fontSize: 24.0,
+                                color: Color(0xFF29377E),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-        itemCount: zodiacsData.length,
+            );
+          },
+          itemCount: zodiacsData.length,
+        ),
       ),
     );
   }
