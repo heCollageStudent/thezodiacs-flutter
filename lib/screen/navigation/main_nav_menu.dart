@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:the_zodiacs/screen/navigation/bottom_nav_menu.dart';
 import 'package:the_zodiacs/screen/page/home_page.dart';
 import 'package:the_zodiacs/screen/page/profile_page.dart';
-
-import 'bottom_nav_menu.dart';
 
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
@@ -24,6 +23,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
         double iconSize = constraints.maxWidth > 800 ? 26 : 18;
         double fontSize = constraints.maxWidth > 800 ? 14 : 12;
 
+        // Mode tablet
         if (constraints.maxWidth > 800) {
           return Scaffold(
             body: Row(
@@ -66,8 +66,10 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
                         Icons.account_circle,
                         size: iconSize,
                       ),
-                      label:
-                          Text('Profil', style: TextStyle(fontSize: fontSize)),
+                      label: Text(
+                        'Profil',
+                        style: TextStyle(fontSize: fontSize),
+                      ),
                     ),
                   ],
                 ),
@@ -76,15 +78,16 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
               ],
             ),
           );
-        } else {
+        }
+        // Mode mobile
+        else {
           return BottomNavigationPage(
-            currentIndex: myCurrentIndex,
-            onDestinationSelected: (index) {
-              setState(() {
-                myCurrentIndex = index;
+              currentIndex: myCurrentIndex,
+              onDestinationSelected: (index) {
+                setState(() {
+                  myCurrentIndex = index;
+                });
               });
-            },
-          );
         }
       },
     );

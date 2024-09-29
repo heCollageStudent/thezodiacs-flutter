@@ -9,7 +9,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        double fontSize = constraints.maxWidth > 600 ? 18 : 20;
+        double fontSize = constraints.maxWidth > 600 ? 20 : 22;
+        bool isTablet = constraints.maxWidth > 800;
+
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -31,20 +33,50 @@ class HomePage extends StatelessWidget {
               ),
             ],
           ),
-          body: Column(
+          body: Row(
             children: [
-              // Use Expanded here to take the remaining space
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                    if (constraints.maxWidth <= 600) {
-                      return const TourismPlaceList();
-                    } else if (constraints.maxWidth <= 1200) {
-                      return TourismPlaceGrid(gridCount: 4, fontSize: fontSize);
-                    } else {
-                      return TourismPlaceGrid(gridCount: 6, fontSize: fontSize);
-                    }
+              if (isTablet)
+                NavigationRail(
+                  selectedIndex: 0,
+                  onDestinationSelected: (int index) {
+                    // Handle navigation rail item selection
                   },
+                  labelType: NavigationRailLabelType.selected,
+                  destinations: const [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.home),
+                      label: Text('Home'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.favorite),
+                      label: Text('Favorites'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.settings),
+                      label: Text('Settings'),
+                    ),
+                  ],
+                ),
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: LayoutBuilder(
+                        builder:
+                            (BuildContext context, BoxConstraints constraints) {
+                          if (constraints.maxWidth <= 600) {
+                            return const TourismPlaceList();
+                          } else if (constraints.maxWidth <= 1200) {
+                            return TourismPlaceGrid(
+                                gridCount: 4, fontSize: fontSize);
+                          } else {
+                            return TourismPlaceGrid(
+                                gridCount: 6, fontSize: fontSize);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -163,11 +195,10 @@ class TourismPlaceGrid extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Removed Expanded widget here
                   Image.asset(
                     sign.imgAsset,
                     fit: BoxFit.fill,
-                    height: 100, // Set a specific height
+                    height: 100,
                   ),
                   const SizedBox(height: 8),
                   Padding(
