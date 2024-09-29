@@ -19,29 +19,55 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        double navRailWidth =
+            constraints.maxWidth > 800 ? 80 : constraints.maxWidth * 0.15;
+        double iconSize = constraints.maxWidth > 800 ? 26 : 18;
+        double fontSize = constraints.maxWidth > 800 ? 14 : 12;
+
         if (constraints.maxWidth > 800) {
           return Scaffold(
             body: Row(
               children: [
                 NavigationRail(
+                  minWidth: navRailWidth,
                   selectedIndex: myCurrentIndex,
+                  indicatorColor: const Color(0xFFCDC2A5),
                   onDestinationSelected: (index) {
                     setState(() {
                       myCurrentIndex = index;
                     });
                   },
                   labelType: NavigationRailLabelType.all,
-                  leading: const Icon(Icons.menu_rounded),
-                  destinations: const [
+                  leading: Icon(
+                    Icons.menu_rounded,
+                    size: iconSize,
+                  ),
+                  destinations: [
                     NavigationRailDestination(
-                      icon: Icon(Icons.home),
-                      selectedIcon: Icon(Icons.home_filled),
-                      label: Text('Beranda'),
+                      icon: Icon(
+                        Icons.home,
+                        size: iconSize,
+                      ),
+                      selectedIcon: Icon(
+                        Icons.home,
+                        size: iconSize,
+                      ),
+                      label: Text(
+                        'Beranda',
+                        style: TextStyle(fontSize: fontSize),
+                      ),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.account_circle),
-                      selectedIcon: Icon(Icons.account_circle_rounded),
-                      label: Text('Profil'),
+                      icon: Icon(
+                        Icons.account_circle,
+                        size: iconSize,
+                      ),
+                      selectedIcon: Icon(
+                        Icons.account_circle,
+                        size: iconSize,
+                      ),
+                      label:
+                          Text('Profil', style: TextStyle(fontSize: fontSize)),
                     ),
                   ],
                 ),

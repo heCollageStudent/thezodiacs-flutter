@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:the_zodiacs/model/data_zodiacs.dart';
 
@@ -64,7 +65,6 @@ class DetailWebPageState extends State<DetailWebPage> {
                   style: const TextStyle(
                     fontSize: 32.0,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Staatliches',
                   ),
                 ),
                 const SizedBox(height: 24.0),
@@ -90,12 +90,21 @@ class DetailWebPageState extends State<DetailWebPage> {
                                 ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(20.0),
-                                  child: Image(
-                                    image: _mainImage.contains('assets')
-                                        ? AssetImage(_mainImage)
-                                            as ImageProvider
-                                        : NetworkImage(_mainImage),
+                                  child: CachedNetworkImage(
+                                    imageUrl: _mainImage.contains('assets')
+                                        ? _mainImage
+                                        : _mainImage,
                                     fit: BoxFit.cover,
+                                    placeholder: (context, url) => Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Center(
+                                      child: Text(
+                                        'Error loading image',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -129,9 +138,24 @@ class DetailWebPageState extends State<DetailWebPage> {
                                           borderRadius:
                                               BorderRadius.circular(10.0),
                                           image: DecorationImage(
-                                            image: NetworkImage(
+                                            image: CachedNetworkImageProvider(
                                                 widget.sign.imgUrls[index]),
                                             fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        child: CachedNetworkImage(
+                                          imageUrl: widget.sign.imgUrls[index],
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) => Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              Center(
+                                            child: Text(
+                                              'Error loading image',
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
                                           ),
                                         ),
                                       ),

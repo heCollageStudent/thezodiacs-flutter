@@ -8,37 +8,50 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Home Page'),
-          backgroundColor: const Color(0xFFCDC2A5),
-          elevation: 4.0,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                showSearch(
-                  context: context,
-                  delegate: ZodiacSearchDelegate(),
-                );
-              },
+      builder: (BuildContext context, BoxConstraints constraints) {
+        double fontSize = constraints.maxWidth > 600 ? 18 : 20;
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'Home Page',
+              style: TextStyle(fontSize: fontSize),
             ),
-          ],
-        ),
-        body: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            if (constraints.maxWidth <= 600) {
-              return const TourismPlaceList();
-            } else if (constraints.maxWidth <= 1200) {
-              return const TourismPlaceGrid(gridCount: 4);
-            } else {
-              return const TourismPlaceGrid(gridCount: 6);
-            }
-          },
-        ),
-      );
-    });
+            backgroundColor: const Color(0xFFCDC2A5),
+            elevation: 4.0,
+            toolbarHeight: 40.0,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  showSearch(
+                    context: context,
+                    delegate: ZodiacSearchDelegate(),
+                  );
+                },
+              ),
+            ],
+          ),
+          body: Column(
+            children: [
+              // Use Expanded here to take the remaining space
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    if (constraints.maxWidth <= 600) {
+                      return const TourismPlaceList();
+                    } else if (constraints.maxWidth <= 1200) {
+                      return TourismPlaceGrid(gridCount: 4, fontSize: fontSize);
+                    } else {
+                      return TourismPlaceGrid(gridCount: 6, fontSize: fontSize);
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -125,13 +138,15 @@ class ZodiacSearchDelegate extends SearchDelegate {
 
 class TourismPlaceGrid extends StatelessWidget {
   final int gridCount;
+  final double fontSize;
 
-  const TourismPlaceGrid({super.key, required this.gridCount});
+  const TourismPlaceGrid(
+      {super.key, required this.gridCount, required this.fontSize});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(10.0),
       child: GridView.count(
         crossAxisCount: gridCount,
         crossAxisSpacing: 16,
@@ -148,19 +163,19 @@ class TourismPlaceGrid extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(
-                    child: Image.asset(
-                      sign.imgAsset,
-                      fit: BoxFit.cover,
-                    ),
+                  // Removed Expanded widget here
+                  Image.asset(
+                    sign.imgAsset,
+                    fit: BoxFit.fill,
+                    height: 100, // Set a specific height
                   ),
                   const SizedBox(height: 8),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
                       sign.name,
-                      style: const TextStyle(
-                        fontSize: 16.0,
+                      style: TextStyle(
+                        fontSize: fontSize,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -169,6 +184,9 @@ class TourismPlaceGrid extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
                     child: Text(
                       sign.birthdate,
+                      style: TextStyle(
+                        fontSize: fontSize * 0.8,
+                      ),
                     ),
                   ),
                 ],

@@ -10,6 +10,7 @@ class ProfilePage extends StatelessWidget {
         title: const Text('Profile Page'),
         backgroundColor: const Color(0xFFCDC2A5),
         elevation: 4.0,
+        toolbarHeight: 40.0,
       ),
       body: Center(
         child: Padding(
