@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_zodiacs/model/data_zodiacs.dart';
-import 'package:the_zodiacs/screen/detail_page.dart';
+import 'package:the_zodiacs/screen/page/detail_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -12,6 +12,8 @@ class HomePage extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Home Page'),
+          backgroundColor: const Color(0xFFCDC2A5),
+          elevation: 4.0,
           actions: [
             IconButton(
               icon: const Icon(Icons.search),
@@ -76,11 +78,14 @@ class ZodiacSearchDelegate extends SearchDelegate {
         final Zodiacs sign = results[index];
         return Card(
           child: ListTile(
-            leading: Image.asset(
-              sign.imgAsset,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
+            leading: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.asset(
+                sign.imgAsset,
+                width: 50,
+                height: 50,
+                fit: BoxFit.cover,
+              ),
             ),
             title: Text(sign.name),
             subtitle: Text(sign.birthdate),
@@ -235,7 +240,7 @@ class TourismPlaceList extends StatelessWidget {
                             sign.name,
                             style: const TextStyle(
                                 fontSize: 24.0,
-                                color: Color(0xFF29377E),
+                                color: Color(0xFF295F98),
                                 fontWeight: FontWeight.bold),
                           ),
                         ],
