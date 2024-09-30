@@ -26,56 +26,62 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
         // Mode tablet
         if (constraints.maxWidth > 800) {
           return Scaffold(
-            body: Row(
-              children: [
-                NavigationRail(
-                  minWidth: navRailWidth,
-                  selectedIndex: myCurrentIndex,
-                  indicatorColor: const Color(0xFFCDC2A5),
-                  onDestinationSelected: (index) {
-                    setState(() {
-                      myCurrentIndex = index;
-                    });
-                  },
-                  labelType: NavigationRailLabelType.all,
-                  leading: Icon(
-                    Icons.menu_rounded,
-                    size: iconSize,
+            body: SafeArea(
+              child: Row(
+                children: [
+                  NavigationRail(
+                    minWidth: navRailWidth,
+                    selectedIndex: myCurrentIndex,
+                    indicatorColor: const Color(0xFFCDC2A5),
+                    onDestinationSelected: (index) {
+                      setState(() {
+                        myCurrentIndex = index;
+                      });
+                    },
+                    labelType: NavigationRailLabelType.all,
+                    leading: Icon(
+                      Icons.menu_rounded,
+                      size: iconSize,
+                    ),
+                    destinations: [
+                      NavigationRailDestination(
+                        icon: Icon(
+                          Icons.home,
+                          size: iconSize,
+                        ),
+                        selectedIcon: Icon(
+                          Icons.home,
+                          size: iconSize,
+                        ),
+                        label: Text(
+                          'Beranda',
+                          style: TextStyle(fontSize: fontSize),
+                        ),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(
+                          Icons.account_circle,
+                          size: iconSize,
+                        ),
+                        selectedIcon: Icon(
+                          Icons.account_circle,
+                          size: iconSize,
+                        ),
+                        label: Text(
+                          'Profil',
+                          style: TextStyle(fontSize: fontSize),
+                        ),
+                      ),
+                    ],
                   ),
-                  destinations: [
-                    NavigationRailDestination(
-                      icon: Icon(
-                        Icons.home,
-                        size: iconSize,
-                      ),
-                      selectedIcon: Icon(
-                        Icons.home,
-                        size: iconSize,
-                      ),
-                      label: Text(
-                        'Beranda',
-                        style: TextStyle(fontSize: fontSize),
-                      ),
+                  const VerticalDivider(thickness: 1, width: 1),
+                  Expanded(
+                    child: SafeArea(
+                      child: pages[myCurrentIndex],
                     ),
-                    NavigationRailDestination(
-                      icon: Icon(
-                        Icons.account_circle,
-                        size: iconSize,
-                      ),
-                      selectedIcon: Icon(
-                        Icons.account_circle,
-                        size: iconSize,
-                      ),
-                      label: Text(
-                        'Profil',
-                        style: TextStyle(fontSize: fontSize),
-                      ),
-                    ),
-                  ],
-                ),
-                const VerticalDivider(thickness: 1, width: 1),
-                Expanded(child: pages[myCurrentIndex]),
-              ],
+                  ),
+                ],
+              ),
             ),
           );
         }

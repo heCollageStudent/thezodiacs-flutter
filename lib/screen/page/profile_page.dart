@@ -17,39 +17,49 @@ class ProfilePage extends StatelessWidget {
             toolbarHeight: 40.0,
           ),
           body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 40.0),
-                    width: isTablet ? 400 : 240,
-                    height: isTablet ? 400 : 240,
-                    child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(isTablet ? 60.0 : 40.0),
-                      child: Image.asset('assets/images/profile_dhirsya.png',
-                          fit: BoxFit.cover),
-                    ),
+            // Memastikan seluruh konten berada di tengah
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: IntrinsicHeight(
+                  // Membuat Column menyesuaikan dengan tinggi konten
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment
+                        .center, // Pusatkan isi Column secara vertikal
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 40.0),
+                        width: isTablet ? 250 : 240,
+                        height: isTablet ? 250 : 240,
+                        child: ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(isTablet ? 60.0 : 40.0),
+                          child: Image.asset(
+                              'assets/images/profile_dhirsya.png',
+                              fit: BoxFit.cover),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        'Dhirsya Ramadhan Pattah',
+                        style: TextStyle(
+                          fontSize: isTablet ? 30 : 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'ramadhandhirsya@gmail.com',
+                        style: TextStyle(
+                          fontSize: isTablet ? 24 : 16,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Dhirsya Ramadhan Pattah',
-                    style: TextStyle(
-                      fontSize: isTablet ? 32 : 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'ramadhandhirsya@gmail.com',
-                    style: TextStyle(
-                      fontSize: isTablet ? 20 : 16,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),

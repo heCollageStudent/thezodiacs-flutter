@@ -35,154 +35,324 @@ class DetailMobilePageState extends State<DetailMobilePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.30),
-                          offset: const Offset(0, 5),
-                          blurRadius: 15.0,
-                          spreadRadius: 5.0,
+        child: LayoutBuilder(builder: (context, constraints) {
+          bool isTablet = constraints.maxWidth > 600;
+          double imageHeight = isTablet ? 500.0 : 650.0;
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: isTablet
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: imageHeight,
+                                margin: const EdgeInsets.all(16.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.30),
+                                          offset: const Offset(0, 5),
+                                          blurRadius: 15.0,
+                                          spreadRadius: 5.0,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Image(
+                                      image: _mainImage.contains('assets')
+                                          ? AssetImage(_mainImage)
+                                              as ImageProvider
+                                          : NetworkImage(_mainImage),
+                                      fit: BoxFit.cover, // Adjusted to cover
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Back arrow and 'Detail' text for tablet too
+                              Positioned(
+                                top: 16.0,
+                                left: 16.0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 6.0, vertical: 6.0),
+                                    padding: const EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.2),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.arrow_back,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 16.0,
+                                left: 0.0,
+                                right: 0.0,
+                                child: Center(
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 6.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4.0, horizontal: 10.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: const Text(
+                                      'Detail',
+                                      style: TextStyle(
+                                        fontSize: 22.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.sign.name,
+                                style: const TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              if (widget.sign.imgUrls.isNotEmpty)
+                                Container(
+                                  height: 150.0,
+                                  margin: const EdgeInsets.fromLTRB(
+                                      8.0, 6.0, 8.0, 6.0),
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: widget.sign.imgUrls.length,
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _mainImage =
+                                                widget.sign.imgUrls[index];
+                                          });
+                                        },
+                                        child: Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          width: 150,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                  widget.sign.imgUrls[index]),
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              Text(
+                                'Tanggal: ${widget.sign.birthdate}',
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.grey[700],
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16.0),
+                                child: SelectionContainer.disabled(
+                                  child: Text(
+                                    widget.sign.description,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image(
-                        image: _mainImage.contains('assets')
-                            ? AssetImage(_mainImage) as ImageProvider
-                            : NetworkImage(_mainImage),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 16.0,
-                    left: 16.0,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 6.0,
-                          vertical: 6.0,
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              height: imageHeight,
+                              margin: const EdgeInsets.all(16.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.30),
+                                        offset: const Offset(0, 5),
+                                        blurRadius: 15.0,
+                                        spreadRadius: 5.0,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Image(
+                                    image: _mainImage.contains('assets')
+                                        ? AssetImage(_mainImage)
+                                            as ImageProvider
+                                        : NetworkImage(_mainImage),
+                                    fit: BoxFit.cover, // Adjusted to cover
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Back arrow and 'Detail' text also for mobile
+                            Positioned(
+                              top: 16.0,
+                              left: 16.0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 6.0, vertical: 6.0),
+                                  padding: const EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.2),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 16.0,
+                              left: 0.0,
+                              right: 0.0,
+                              child: Center(
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 6.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4.0, horizontal: 10.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: const Text(
+                                    'Detail',
+                                    style: TextStyle(
+                                      fontSize: 22.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.2),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 16.0,
-                    left: 0.0,
-                    right: 0.0,
-                    child: Center(
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 6.0),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 4.0,
-                          horizontal: 10.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: const Text(
-                          'Detail',
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(16.0, 20.0, 0.0, 6.0),
-                child: Text(
-                  widget.sign.name,
-                  style: const TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              if (widget.sign.imgUrls.isNotEmpty)
-                Container(
-                  height: 150.0,
-                  margin: const EdgeInsets.fromLTRB(8.0, 6.0, 8.0, 6.0),
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.sign.imgUrls.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _mainImage = widget.sign.imgUrls[index];
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                          ),
-                          width: 150,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            image: DecorationImage(
-                              image: NetworkImage(widget.sign.imgUrls[index]),
-                              fit: BoxFit.cover,
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(16.0, 20.0, 0.0, 6.0),
+                          child: Text(
+                            widget.sign.name,
+                            style: const TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
-                ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(16.0, 10.0, 0.0, 6.0),
-                child: Text(
-                  'Tanggal: ${widget.sign.birthdate}',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.grey[700],
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: SelectionContainer.disabled(
-                  child: Text(
-                    widget.sign.description,
-                    softWrap: true,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.grey[600],
+                        if (widget.sign.imgUrls.isNotEmpty)
+                          Container(
+                            height: 150.0,
+                            margin:
+                                const EdgeInsets.fromLTRB(8.0, 6.0, 8.0, 6.0),
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: widget.sign.imgUrls.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _mainImage = widget.sign.imgUrls[index];
+                                    });
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                            widget.sign.imgUrls[index]),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(16.0, 10.0, 0.0, 6.0),
+                          child: Text(
+                            'Tanggal: ${widget.sign.birthdate}',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.grey[700],
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: SelectionContainer.disabled(
+                            child: Text(
+                              widget.sign.description,
+                              softWrap: true,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        }),
       ),
     );
   }
